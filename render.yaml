@@ -34,7 +34,6 @@ services:
     name: altair-worker
     runtime: ruby
     region: frankfurt
-    plan: free
     buildCommand: bundle install
     startCommand: bundle exec sidekiq
     envVars:
