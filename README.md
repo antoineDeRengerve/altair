@@ -1,6 +1,12 @@
 # README
 
-Public website: <https://altair-og04.onrender.com>
+## Deployment on render
+
+Create a blueprint connecting to this repo.
+Do not forget to configure the env variable RAILS_MASTER_KEY in the web service
+
+Public website:
+https://altair-5h65.onrender.com
 
 ## OTHERS
 

@@ -2,6 +2,7 @@ databases:
   - name: altair
     databaseName: altair
     user: altair
+    region: frankfurt
     plan: free
 
 services:
@@ -14,7 +15,6 @@ services:
     # preDeployCommand: "bundle exec rails db:migrate" # preDeployCommand only available on paid instance types
     startCommand: "bundle exec rails server"
     ## TODO Advanced config - not working...
-    #buildCommand: "bundle install; bundle exec rake assets:precompile; bundle exec rake assets:clean;"
     #startCommand: "bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}"
     envVars:
       - key: DATABASE_URL
