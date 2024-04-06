@@ -10,9 +10,12 @@ services:
     runtime: ruby
     region: frankfurt
     plan: free
-    buildCommand: "bundle install; bundle exec rake assets:precompile; bundle exec rake assets:clean;"
+    buildCommand: "./bin/render-build.sh"
     # preDeployCommand: "bundle exec rails db:migrate" # preDeployCommand only available on paid instance types
-    startCommand: "bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}"
+    startCommand: "bundle exec rails server"
+    ## TODO Advanced config - not working...
+    #buildCommand: "bundle install; bundle exec rake assets:precompile; bundle exec rake assets:clean;"
+    #startCommand: "bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -33,17 +36,3 @@ services:
     plan: free
     maxmemoryPolicy: noeviction
     ipAllowList: [] # only allow internal connections
-  - type: worker
-    name: altair-worker
-    runtime: ruby
-    region: frankfurt
-    buildCommand: bundle install
-    startCommand: bundle exec sidekiq
-    envVars:
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: altair-redis
-          property: connectionString
-      - key: RAILS_MASTER_KEY
-        sync: false
