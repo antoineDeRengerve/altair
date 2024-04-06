@@ -23,7 +23,10 @@ services:
       - key: WEB_CONCURRENCY
         value: 2 # sensible default
       - key: REDIS_URL
-        value: redis://red-co8g2qev3ddc73fhc1rg:6379
+        fromService:
+          type: redis
+          name: altair-redis
+          property: connectionString
   - type: redis
     name: altair-redis
     region: frankfurt
