@@ -9,9 +9,9 @@ services:
     name: altair
     runtime: ruby
     plan: free
-    buildCommand: "./bin/render-build.sh"
+    buildCommand: "bundle install; bundle exec rake assets:precompile; bundle exec rake assets:clean;"
     # preDeployCommand: "bundle exec rails db:migrate" # preDeployCommand only available on paid instance types
-    startCommand: "bundle exec rails server"
+    startCommand: "bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -21,3 +21,5 @@ services:
         sync: false
       - key: WEB_CONCURRENCY
         value: 2 # sensible default
+      - key: REDIS_URL
+        value: redis://red-co8g2qev3ddc73fhc1rg:6379
