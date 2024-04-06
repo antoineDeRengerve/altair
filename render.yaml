@@ -8,6 +8,7 @@ services:
   - type: web
     name: altair
     runtime: ruby
+    region: frankfurt
     plan: free
     buildCommand: "bundle install; bundle exec rake assets:precompile; bundle exec rake assets:clean;"
     # preDeployCommand: "bundle exec rails db:migrate" # preDeployCommand only available on paid instance types
@@ -23,3 +24,24 @@ services:
         value: 2 # sensible default
       - key: REDIS_URL
         value: redis://red-co8g2qev3ddc73fhc1rg:6379
+  - type: redis
+    name: altair-redis
+    region: frankfurt
+    plan: free
+    maxmemoryPolicy: noeviction
+    ipAllowList: [] # only allow internal connections
+  - type: worker
+    name: altair-worker
+    runtime: ruby
+    region: frankfurt
+    plan: free
+    buildCommand: bundle install
+    startCommand: bundle exec sidekiq
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: altair-redis
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
